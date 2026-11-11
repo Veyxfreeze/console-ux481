@@ -278,6 +278,26 @@ console-pc-setup pc TonUtilisateurWindows@100.x.y.z
 Les mots de passe ne sont demandés qu'une fois (pour installer la clé de la console) et ne
 sont pas enregistrés. `console-pc-setup test` vérifie le tout.
 
+### Volant et pédalier sur le PC (VirtualHere)
+
+Le volant (Moza R3…) se branche en USB sur la console, qui le partage avec le PC grâce au serveur
+VirtualHere (installé d'office, service `virtualhere`). Sur le PC, le jeu et Moza Pit House le
+voient comme s'il était branché directement. L'image arrive par Moonlight, comme d'habitude.
+
+1. Sur le PC : installe le client VirtualHere pour Windows (virtualhere.com) et Moza Pit House.
+2. Dans le client : clic droit sur *USB Hubs* › *Specify Hubs…* › *Add*, puis l'adresse Tailscale de la
+   console suivie de `:7575` (`console-diag` l'affiche dans la partie *Volant*). Hors réseau local,
+   la détection automatique ne trouve pas la console.
+3. Le volant apparaît sous la console : clic droit › *Auto-Use Device*, pour qu'il soit repris
+   tout seul à chaque connexion. Option conseillée : *Install Client as a Service*.
+
+- Version gratuite : un seul appareil USB partagé. Un pédalier branché sur la base du volant passe
+  par le même câble ; un pédalier avec son propre câble USB demande la licence du serveur.
+- Les appareils internes de la console (Bluetooth de la manette…) ne sont jamais partagés.
+- Retour de force : à distance, il arrive avec la moitié du ping de retard. S'il semble flou ou
+  oscille, baisse la force et ajoute de l'amortissement dans Pit House.
+- Mises à jour du firmware Moza : uniquement avec le volant branché directement sur le PC.
+
 ## 7. Émulation
 
 ### Ajouter des jeux et des BIOS

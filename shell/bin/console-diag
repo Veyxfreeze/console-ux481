@@ -175,6 +175,24 @@ if info is not None and not inputs:
     print("  aucun flux en cours")
 PY
 
+section "Volant (VirtualHere)"
+if [[ -x /usr/local/sbin/vhusbdx86_64 ]]; then
+  echo "service : $(systemctl is-active virtualhere.service 2>/dev/null)"
+  if ss -ltn 2>/dev/null | grep -q ':7575 '; then echo "écoute sur le port 7575 : oui"; else echo "écoute sur le port 7575 : non"; fi
+  grep -E '^(ServerName|IgnoredDevices)=' /usr/local/etc/virtualhere/config.ini 2>/dev/null
+  ts=$(tailscale ip -4 2>/dev/null | head -n 1)
+  [[ -n $ts ]] && echo "adresse à donner au client VirtualHere du PC : $ts:7575"
+else
+  echo "serveur VirtualHere non installé (sudo ./update.sh --only 72)"
+fi
+found=0
+for d in /sys/bus/usb/devices/*; do
+  [[ $(cat "$d/idVendor" 2>/dev/null) == 346e ]] || continue
+  found=1
+  echo "Moza branché : $(cat "$d/product" 2>/dev/null || echo ?) ($(cat "$d/idVendor"):$(cat "$d/idProduct"), pilote $(basename "$(readlink -f "$d"/*:1.0/driver 2>/dev/null)" 2>/dev/null))"
+done
+(( found )) || echo "aucun appareil Moza branché"
+
 section "Dolphin"
 grep -HE '^(GFXBackend|Fullscreen|RenderToMain|FullscreenDisplayRes|AspectRatio|InternalResolution|wideScreenHack|Crop) ' \
   "$VAR/org.DolphinEmu.dolphin-emu/config/dolphin-emu/Dolphin.ini" "$VAR/org.DolphinEmu.dolphin-emu/config/dolphin-emu/GFX.ini" 2>/dev/null \
